@@ -11,8 +11,9 @@ def main():
     args = parser.parse_args()
     user_input = args.input
 
-    generate_branding_snippet(user_input)
-    pass
+    result = generate_branding_snippet(user_input)
+    print(result)
+    
 
 
 def generate_branding_snippet(prompt: str):
@@ -35,7 +36,8 @@ def generate_branding_snippet(prompt: str):
     last_char = branding_text[-1]
     if last_char not in {".", "!", "?"}:
         branding_text += "..."
-    print(branding_text)
+   
+    return branding_text
 
 
 if __name__ == "__main__":
