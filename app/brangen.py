@@ -29,7 +29,7 @@ def generate_branding_snippet(prompt: str) -> str:
 
     # Load API key from env
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    instruct_prompt = f"Generate upbeat branding snippet for {prompt}: "
+    instruct_prompt = f"Generate upbeat branding snippet {prompt}: "
     print(instruct_prompt)
     # get the snippet from the the 3rd party API by providing prompt and instruction
     response = openai.Completion.create(
