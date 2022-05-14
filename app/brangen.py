@@ -5,6 +5,8 @@ import argparse
 import re
 
 
+MAX_INPUT_LEN = 20
+
 def main():
     print("Running BranGen")
 
@@ -12,14 +14,18 @@ def main():
     parser.add_argument("--input", "-i", type=str, required=True)
     args = parser.parse_args()
     user_input = args.input
+    if validate_length(user_input):
+        snippet_result = generate_branding_snippet(user_input)
+        keywords_result = generate_keywords(user_input)
+        print(snippet_result)
+        print(keywords_result)
 
-    snippet_result = generate_branding_snippet(user_input)
-    keywords_result = generate_keywords(user_input)
-
-
-    print(snippet_result)
-    print(keywords_result)
+    else:
+        raise ValueError(f"Input is too long, Must be under {MAX_INPUT_LEN}.")
     
+
+def validate_length(prompt: str) -> bool:
+    return len(prompt) <= MAX_INPUT_LEN
 
 
 def generate_branding_snippet(prompt: str) -> str:
@@ -27,7 +33,7 @@ def generate_branding_snippet(prompt: str) -> str:
     # Load API key from env
     openai.api_key = os.getenv("OPENAI_API_KEY")
     instruct_prompt = f"Generate upbeat branding snippet for {prompt}: "
-
+    print(instruct_prompt)
     # get the snippet from the the 3rd party API by providing prompt and instruction
     response = openai.Completion.create(
         engine="text-davinci-001", prompt=instruct_prompt, max_tokens=32
@@ -50,7 +56,7 @@ def generate_keywords(prompt: str) -> List[str]:
     # Load API key from env
     openai.api_key = os.getenv("OPENAI_API_KEY")
     instruct_prompt = f"Generate related branding keywords for {prompt}: "
-
+    print(instruct_prompt)
     # get keywords from the the 3rd party API by providing prompt and instruction
     response = openai.Completion.create(
         engine="text-davinci-001", prompt=instruct_prompt, max_tokens=32
