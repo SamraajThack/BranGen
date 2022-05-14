@@ -8,8 +8,6 @@ import re
 MAX_INPUT_LEN = 20
 
 def main():
-    print("Running BranGen")
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", "-i", type=str, required=True)
     args = parser.parse_args()
@@ -17,8 +15,7 @@ def main():
     if validate_length(user_input):
         snippet_result = generate_branding_snippet(user_input)
         keywords_result = generate_keywords(user_input)
-        print(snippet_result)
-        print(keywords_result)
+      
 
     else:
         raise ValueError(f"Input is too long, Must be under {MAX_INPUT_LEN}.")
@@ -48,7 +45,8 @@ def generate_branding_snippet(prompt: str) -> str:
     last_char = branding_text[-1]
     if last_char not in {".", "!", "?"}:
         branding_text += "..."
-   
+    
+    print(f"Snippet: {branding_text}")
     return branding_text
 
 def generate_keywords(prompt: str) -> List[str]:
@@ -70,6 +68,7 @@ def generate_keywords(prompt: str) -> List[str]:
     keywords_array = re.split(",|\n|;|-", keywords_text)
     keywords_array =  [k.strip().lower() for k in keywords_array if len(k) > 0]
 
+    print(f"Keywords: {keywords_array}")
     return keywords_array
 
 
