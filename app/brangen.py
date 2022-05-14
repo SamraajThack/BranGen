@@ -1,6 +1,8 @@
+from typing import List
 import os
 import openai
 import argparse
+import re
 
 
 def main():
@@ -11,18 +13,22 @@ def main():
     args = parser.parse_args()
     user_input = args.input
 
-    result = generate_branding_snippet(user_input)
-    print(result)
+    snippet_result = generate_branding_snippet(user_input)
+    keywords_result = generate_keywords(user_input)
+
+
+    print(snippet_result)
+    print(keywords_result)
     
 
 
-def generate_branding_snippet(prompt: str):
+def generate_branding_snippet(prompt: str) -> str:
 
     # Load API key from env
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    instruct_prompt = f"Generate upbeat branding snippet for {prompt} "
+    instruct_prompt = f"Generate upbeat branding snippet for {prompt}: "
 
-    # get the snippet from the the 3rd party API by providing instruction
+    # get the snippet from the the 3rd party API by providing prompt and instruction
     response = openai.Completion.create(
         engine="text-davinci-001", prompt=instruct_prompt, max_tokens=32
     )
@@ -38,6 +44,27 @@ def generate_branding_snippet(prompt: str):
         branding_text += "..."
    
     return branding_text
+
+def generate_keywords(prompt: str) -> List[str]:
+
+    # Load API key from env
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    instruct_prompt = f"Generate related branding keywords for {prompt}: "
+
+    # get keywords from the the 3rd party API by providing prompt and instruction
+    response = openai.Completion.create(
+        engine="text-davinci-001", prompt=instruct_prompt, max_tokens=32
+    )
+
+    # extract text from reponse
+    keywords_text: str = response["choices"][0]["text"]
+    #strip whitespce
+    keywords_text = keywords_text.strip() 
+    #split into array using regex
+    keywords_array = re.split(",|\n|;|-", keywords_text)
+    keywords_array =  [k.strip() for k in keywords_array if len(k) > 0]
+
+    return keywords_array
 
 
 if __name__ == "__main__":
