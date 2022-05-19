@@ -5,7 +5,7 @@ import argparse
 import re
 
 
-MAX_INPUT_LEN = 20
+MAX_INPUT_LEN = 30
 
 def main():
     parser = argparse.ArgumentParser()
