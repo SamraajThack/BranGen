@@ -1,15 +1,21 @@
 import React from "react";
+import Form from "./form";
+import Results from "./result";
+
 const BranGen: React.FC = () => {
+  const CHARACTER_LIMIT = 20;
   const [prompt, setPrompt] = React.useState("");
   const [snippet, setSnippet] = React.useState("");
   const [keywords, setKeywords] = React.useState([]);
   const [hasResult, setHasResult] = React.useState(false);
+  const[isLoading, setIsLoading] = React.useState(false);
 
   const ENDPOINT: string =
     "https://zoluoux2oe.execute-api.us-east-1.amazonaws.com/prod/generate_snippet_and_keywords";
 
   const onSubmit = () => {
     console.log("Submitting: " + prompt);
+    setIsLoading(true);
     fetch(`${ENDPOINT}?prompt=${prompt}`)
       .then((res) => res.json())
       .then(onResult);
@@ -19,38 +25,30 @@ const BranGen: React.FC = () => {
     setSnippet(data.snippet);
     setKeywords(data.keywords);
     setHasResult(true);
+    setIsLoading(false);
   };
 
-  let resultsElement = null;
+  const onReset = () => {
+    setPrompt("");
+    setHasResult(false);
+    setIsLoading(false)
+  };
 
+  let displayedElement = null;
   if (hasResult) {
-    resultsElement = (
-      <div>
-        Here are your results
-        <div>
-          Snippet: {snippet}
-          Keywords: {keywords.join(", ")}
-        </div>
-      </div>
+    displayedElement = (
+      <Results snippet={snippet} keywords={keywords} onBack={onReset} prompt={prompt}  />
+    );
+  } else {
+    displayedElement = (
+      <Form prompt={prompt} setPrompt={setPrompt} onSubmit={onSubmit} isLoading={isLoading} characterLimit={CHARACTER_LIMIT} />
     );
   }
 
   return (
     <>
       <h1>BranGen</h1>
-      <p>
-        Tell me what your brand is about and I will generate brand snippets and
-        marketing keywords for you
-      </p>
-      <input
-        type="text"
-        placeholder="coffee"
-        value={prompt}
-        onChange={(e) => setPrompt(e.currentTarget.value)}
-      ></input>
-
-      <button onClick={onSubmit}>Submit</button>
-      {resultsElement}
+      {displayedElement}
     </>
   );
 };
