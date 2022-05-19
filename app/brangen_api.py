@@ -1,11 +1,20 @@
 from fastapi import FastAPI, HTTPException
 from brangen import generate_branding_snippet, generate_keywords
 from mangum import Mangum
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 handler = Mangum(app)
 MAX_INPUT_LEN = 20
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
+)
 
 @app.get("/generate_snippet")
 async def generate_snippet_api(prompt: str):
