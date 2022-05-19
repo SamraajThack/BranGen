@@ -66,7 +66,7 @@ const BranGen: React.FC = () => {
       <div className="max-w-md m-auto p-2">
         <div className="bg-gray-800 p-6 rounded-md text-white">
           <div className="text-center my-6">
-            <Image src={logo} width={250} height={250} />
+            <Image src={logo} width={300} height={300} />
             <h1
               className={
                 gradientTextSyle + " text-4xl  font-light"
