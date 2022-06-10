@@ -21,6 +21,8 @@ def main():
         raise ValueError(f"Input is too long, Must be under {MAX_INPUT_LEN}.")
     
 
+
+
 def validate_length(prompt: str) -> bool:
     return len(prompt) <= MAX_INPUT_LEN
 
