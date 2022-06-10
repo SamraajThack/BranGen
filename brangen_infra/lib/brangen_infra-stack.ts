@@ -28,7 +28,7 @@ export class BrangenInfraStack extends Stack {
       layers : [layer],
       environment:{
         OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
-      }
+      },
     });
 
     const branGenApi = new apiGateway.RestApi(this, "RestApi", {
